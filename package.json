@@ -12,6 +12,7 @@
   "dependencies": {
     "nodemon": "^3.1.10",
     "ws": "^8.18.2",
-    "wscat": "^6.1.0"
+    "wscat": "^6.1.0",
+    "node-fetch": "^3.0.0"
   }
 }
