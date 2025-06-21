@@ -69,6 +69,28 @@ The flow consists of three main nodes:
         }
         ```
 
+    * **Code inside the "Code" node**
+    ```javascript
+    // 1. Get the JSON string from the input.
+    //    Assuming your Webhook output structure is $input.first().json.body.message
+    const messageString = $input.first().json.body.message;
+
+    // 2. Parse the JSON string into a JavaScript array of objects.
+    const parsedItems = JSON.parse(messageString);
+
+    // 3. Transform the array of objects into the format n8n expects for output.
+    //    Each object in the 'parsedItems' array should become a new n8n item.
+    const outputItems = [];
+    for (const item of parsedItems) {
+        outputItems.push({
+            json: item // Wrap each parsed object in a 'json' property
+        });
+    }
+
+    // 4. Return the array of n8n items.
+    return outputItems;
+```
+
 3.  **Telegram:** This node sends a message to a specified Telegram chat. It uses data extracted from the previous "Code" node to construct the message.
 
     *   **Message Format:** `น้อง {{ $json.name }} อยู่ที่ {{ $json.location }} เมื่อเวลา {{ $json.lastUpdate }}` (Translated: "Nong {{ name }} is at {{ location }} at {{ lastUpdate }}")
@@ -91,10 +113,13 @@ To get the "SchoolCheck" system up and running, follow these steps:
 4.  **Get Webhook URL:** After activating, you can find the webhook URL by opening the "Webhook" node and copying the "Webhook URL." This is the URL you will use in your backend configuration.
 
 ### 2. Backend Server Setup (`backend/`)
-TODO 21
+```sh
+https://github.com/warathepj/n8n-SchoolCheck-backend.git
+```
+
 1.  **Navigate to Backend Directory:**
     ```sh
-    cd backend/
+    cd n8n-SchoolCheck-backend
     ```
 2.  **Install Dependencies:**
     ```sh
@@ -102,11 +127,16 @@ TODO 21
     ```
 3.  **Run the Backend Server:**
     ```sh
+    npm start 
+    or
     node server.js
     ```
     The WebSocket server will start on `ws://localhost:8081`. Ensure this port is open and not in use by other applications.
 
 ### 3. Frontend Application Setup (`wanderlust-campus-tracker/`)
+```sh
+https://github.com/warathepj/wanderlust-campus-tracker.git
+```
 
 1.  **Navigate to Frontend Directory:**
     ```sh
